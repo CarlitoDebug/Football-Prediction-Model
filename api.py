@@ -10,6 +10,20 @@ from predict import get_prediction_data
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for all routes & origins
 
+@app.route('/', methods=['GET'])
+def health_check():
+    return jsonify({
+        "status": "online",
+        "service": "FootyPredict API",
+        "endpoints": [
+            "/api/teams",
+            "/api/fixtures",
+            "/api/predict",
+            "/api/h2h",
+            "/api/league-stats"
+        ]
+    })
+
 @app.route('/api/teams', methods=['GET'])
 def get_teams():
     all_teams = set()
