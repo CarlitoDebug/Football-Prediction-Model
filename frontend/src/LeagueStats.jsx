@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+const RAW_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = RAW_API_URL.replace(/\/+$/, '').endsWith('/api')
+  ? RAW_API_URL.replace(/\/+$/, '')
+  : `${RAW_API_URL.replace(/\/+$/, '')}/api`;
+
 const LeagueStats = ({ activeLeague, getTeamLogo }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +15,7 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:8000/api/league-stats?league=${encodeURIComponent(activeLeague)}`);
+        const response = await fetch(`${API_URL}/league-stats?league=${encodeURIComponent(activeLeague)}`);
         if (!response.ok) {
           throw new Error('Failed to fetch league stats');
         }

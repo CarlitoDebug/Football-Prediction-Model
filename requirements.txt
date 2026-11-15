@@ -1,0 +1,11 @@
+Flask>=3.0.0
+Flask-Cors>=4.0.0
+gunicorn>=21.2.0
+numpy>=1.26.0
+pandas>=2.2.0
+scikit-learn>=1.4.0
+scipy>=1.12.0
+lightgbm>=4.3.0
+xgboost>=2.0.0
+catboost>=1.2.0
+thefuzz>=0.22.1

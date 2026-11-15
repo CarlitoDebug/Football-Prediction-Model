@@ -1,0 +1,29 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+catboost_info/
+
+# Frontend dependencies & build output
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Secrets & Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS & temporary caches
+.DS_Store
+Thumbs.db
+downloaded_files/
+
+# Note: data/ and models/ are explicitly NOT ignored so Render and GitHub Actions keep data in sync.

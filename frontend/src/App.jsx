@@ -5,7 +5,10 @@ import LeagueStats from './LeagueStats';
 import TeamFormCard from './TeamFormCard';
 import BttsPredictionsCard from './BttsPredictionsCard';
 
-const API_URL = 'http://localhost:8000/api';
+const RAW_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_URL = RAW_API_URL.replace(/\/+$/, '').endsWith('/api')
+  ? RAW_API_URL.replace(/\/+$/, '')
+  : `${RAW_API_URL.replace(/\/+$/, '')}/api`;
 const LEAGUES = ['All', 'ENG-Premier League', 'ESP-La Liga', 'GER-Bundesliga'];
 
 const App = () => {
