@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const RAW_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const API_URL = RAW_API_URL.replace(/\/+$/, '').endsWith('/api')
-  ? RAW_API_URL.replace(/\/+$/, '')
-  : `${RAW_API_URL.replace(/\/+$/, '')}/api`;
+import { API_URL } from './config/api';
 
 const LeagueStats = ({ activeLeague, getTeamLogo }) => {
   const [stats, setStats] = useState(null);
@@ -17,12 +13,13 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
       try {
         const response = await fetch(`${API_URL}/league-stats?league=${encodeURIComponent(activeLeague)}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch league stats');
+          throw new Error(`Failed to fetch league stats (HTTP ${response.status})`);
         }
         const data = await response.json();
         setStats(data);
       } catch (err) {
-        setError(err.message);
+        console.error("API Fetch Failed (league-stats):", err);
+        setError(err.message || 'Failed to load league statistics');
       } finally {
         setLoading(false);
       }
@@ -44,8 +41,17 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
 
   if (error) {
     return (
-      <div className="error-message">
-        {error}
+      <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
+        <p style={{ color: 'var(--rose-text)', fontWeight: 600, fontSize: 14, margin: '0 0 8px 0' }}>{error}</p>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '0 0 16px 0' }}>
+          Target API: <code>{API_URL}</code>
+        </p>
+        <p style={{ fontSize: 12, color: 'var(--text-secondary)', margin: '0 0 16px 0' }}>
+          If using Render's free tier, the cloud server may be spinning up from inactivity (~30–45s).
+        </p>
+        <button className="btn-secondary" onClick={() => window.location.reload()}>
+          Retry Loading Standings
+        </button>
       </div>
     );
   }

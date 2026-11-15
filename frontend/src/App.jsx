@@ -5,14 +5,12 @@ import LeagueStats from './LeagueStats';
 import TeamFormCard from './TeamFormCard';
 import BttsPredictionsCard from './BttsPredictionsCard';
 
-const RAW_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-const API_URL = RAW_API_URL.replace(/\/+$/, '').endsWith('/api')
-  ? RAW_API_URL.replace(/\/+$/, '')
-  : `${RAW_API_URL.replace(/\/+$/, '')}/api`;
+import { API_URL, API_BASE_URL } from './config/api';
 const LEAGUES = ['All', 'ENG-Premier League', 'ESP-La Liga', 'GER-Bundesliga'];
 
 const App = () => {
   const [teams, setTeams] = useState([]);
+  const [teamsError, setTeamsError] = useState(null);
   const [currentTab, setCurrentTab] = useState('dashboard');
   const [activeLeague, setActiveLeague] = useState('All');
   const [homeTeam, setHomeTeam] = useState('');
@@ -27,20 +25,28 @@ const App = () => {
   // Fixtures State
   const [fixtures, setFixtures] = useState([]);
   const [fixturesLoading, setFixturesLoading] = useState(false);
+  const [fixturesError, setFixturesError] = useState(null);
   const [availableMatchweeks, setAvailableMatchweeks] = useState([]);
   const [currentMatchweekIndex, setCurrentMatchweekIndex] = useState(0);
 
   useEffect(() => {
     fetch(`${API_URL}/teams`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         if (data.teams) {
           setTeams(data.teams);
+          setTeamsError(null);
           if (data.teams.includes("Arsenal")) setHomeTeam("Arsenal");
           if (data.teams.includes("Chelsea")) setAwayTeam("Chelsea");
         }
       })
-      .catch(err => console.error("Failed to load teams:", err));
+      .catch(err => {
+        console.error("API Fetch Failed (teams):", err);
+        setTeamsError("Could not reach backend API. If the free cloud server was sleeping, please wait ~30s and refresh.");
+      });
   }, []);
 
   useEffect(() => {
@@ -158,12 +164,14 @@ const App = () => {
 
   const fetchFixtures = async (league) => {
     setFixturesLoading(true);
+    setFixturesError(null);
     try {
       let url = `${API_URL}/fixtures`;
       if (league && league !== 'All') {
         url += `?league=${encodeURIComponent(league)}`;
       }
       const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.fixtures) {
         setFixtures(data.fixtures);
@@ -172,7 +180,8 @@ const App = () => {
         setCurrentMatchweekIndex(0);
       }
     } catch (err) {
-      console.error("Failed to load fixtures:", err);
+      console.error("API Fetch Failed (fixtures):", err);
+      setFixturesError("Failed to load fixtures. If the cloud server is waking up, please wait ~30s and retry.");
     } finally {
       setFixturesLoading(false);
     }
@@ -217,7 +226,8 @@ const App = () => {
 
       setPrediction(data);
     } catch (err) {
-      setError(err.message);
+      console.error("API Fetch Failed (predict):", err);
+      setError(err.message || 'Error communicating with prediction server');
     } finally {
       setLoading(false);
     }
@@ -271,6 +281,28 @@ const App = () => {
           ═══════════════════════════════════════════════════ */}
           {currentTab === 'dashboard' && (
             <>
+              {teamsError && (
+                <div className="card" style={{ padding: '14px 18px', background: 'var(--rose-bg)', border: '1px solid var(--rose-border)', marginBottom: 16 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                    <div>
+                      <p style={{ color: 'var(--rose-text)', fontSize: 13, margin: 0, fontWeight: 600 }}>
+                        {teamsError}
+                      </p>
+                      <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
+                        API Endpoint: <code>{API_URL}</code>
+                      </p>
+                    </div>
+                    <button
+                      className="btn-secondary"
+                      style={{ fontSize: 12, padding: '4px 12px' }}
+                      onClick={() => window.location.reload()}
+                    >
+                      Retry Connection
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Match Selector Card */}
               <div className="card">
                 <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: 16 }}>
@@ -658,6 +690,16 @@ const App = () => {
 
               {fixturesLoading ? (
                 <div style={{ textAlign: 'center', padding: '3rem' }}><div className="loader"></div></div>
+              ) : fixturesError ? (
+                <div className="card" style={{ padding: '2.5rem', textAlign: 'center' }}>
+                  <p style={{ color: 'var(--rose-text)', fontWeight: 600, fontSize: 14, margin: '0 0 8px 0' }}>{fixturesError}</p>
+                  <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: '0 0 16px 0' }}>
+                    Target API: <code>{API_URL}</code>
+                  </p>
+                  <button className="btn-secondary" onClick={() => fetchFixtures(activeLeague)}>
+                    Retry Loading Fixtures
+                  </button>
+                </div>
               ) : fixtures.length === 0 ? (
                 <div className="card" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                   No upcoming fixtures found for this league.
