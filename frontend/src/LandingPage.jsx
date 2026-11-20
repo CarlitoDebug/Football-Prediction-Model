@@ -1,7 +1,41 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 /* ─────────────────────────────────────────────────────────
-   useReveal — fires once when element enters viewport
+   useScrollDirection — tracks whether user scrolls up or down
+───────────────────────────────────────────────────────── */
+function useScrollDirection() {
+  const [direction, setDirection] = useState('down');
+
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const updateDirection = () => {
+      const currentY = window.scrollY;
+      const diff = currentY - lastY;
+      if (Math.abs(diff) > 4) {
+        setDirection(diff > 0 ? 'down' : 'up');
+        lastY = currentY > 0 ? currentY : 0;
+      }
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateDirection);
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return direction;
+}
+
+/* ─────────────────────────────────────────────────────────
+   useReveal — continuous observer on both scroll down & up
 ───────────────────────────────────────────────────────── */
 function useReveal(threshold = 0.12) {
   const ref = useRef(null);
@@ -12,12 +46,12 @@ function useReveal(threshold = 0.12) {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          obs.disconnect();
-        }
+        setVisible(entry.isIntersecting);
       },
-      { threshold }
+      {
+        threshold,
+        rootMargin: '0px 0px -20px 0px',
+      }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -27,15 +61,25 @@ function useReveal(threshold = 0.12) {
 }
 
 /* ─────────────────────────────────────────────────────────
-   RevealBlock — wraps a child with a fade-up reveal
+   RevealBlock — bidirectional popping animation (down & up)
 ───────────────────────────────────────────────────────── */
 function RevealBlock({ children, delay = 0, className = '' }) {
   const [ref, visible] = useReveal();
+  const scrollDir = useScrollDirection();
+
+  const animClass = visible
+    ? 'lp-reveal--in'
+    : scrollDir === 'up'
+    ? 'lp-reveal--from-top'
+    : 'lp-reveal--from-bottom';
+
   return (
     <div
       ref={ref}
-      className={`lp-reveal ${visible ? 'lp-reveal--in' : ''} ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={`lp-reveal ${animClass} ${className}`}
+      style={{
+        transitionDelay: visible ? `${delay}ms` : '0ms',
+      }}
     >
       {children}
     </div>
