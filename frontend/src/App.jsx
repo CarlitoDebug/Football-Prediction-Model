@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
-import Sidebar from './Sidebar';
 import TopNavbar from './TopNavbar';
 import LandingPage from './LandingPage';
 import LeagueStats from './LeagueStats';
@@ -256,17 +255,10 @@ const App = () => {
 
   return (
     <div className="app-shell">
-      <Sidebar
-        currentTab={currentTab}
-        onTabChange={handleTabChange}
-        activeLeague={activeLeague}
-        onSelectLeague={setActiveLeague}
-      />
+      <TopNavbar currentTab={currentTab} onTabChange={handleTabChange} />
 
-      <div className="main-wrapper">
-        <TopNavbar currentTab={currentTab} onTabChange={handleTabChange} />
-
-        <div className="main-container">
+      <main className={`main-wrapper${currentTab === 'home' ? ' main-wrapper--full' : ''}`}>
+        <div className={`main-container${currentTab === 'home' ? ' main-container--full' : ''}`}>
 
           {/* ═══════════════════════════════════════════════════
               TAB: HOME (Landing Page)
@@ -657,7 +649,11 @@ const App = () => {
               TAB: LEAGUE STATS
           ═══════════════════════════════════════════════════ */}
           {currentTab === 'leagueStats' && (
-            <LeagueStats activeLeague={activeLeague} getTeamLogo={getTeamLogo} />
+            <LeagueStats
+              activeLeague={activeLeague}
+              getTeamLogo={getTeamLogo}
+              onSelectLeague={setActiveLeague}
+            />
           )}
 
           {/* ═══════════════════════════════════════════════════
@@ -769,7 +765,7 @@ const App = () => {
           )}
 
         </div>
-      </div>
+      </main>
     </div>
   );
 };

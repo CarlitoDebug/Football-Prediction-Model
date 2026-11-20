@@ -1,17 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from './config/api';
 
-const LeagueStats = ({ activeLeague, getTeamLogo }) => {
+const LEAGUES = [
+  { id: 'ENG-Premier League', name: 'English Premier League' },
+  { id: 'ESP-La Liga', name: 'La Liga' },
+  { id: 'GER-Bundesliga', name: 'Bundesliga' },
+];
+
+const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const selectedLeague = (!activeLeague || activeLeague === 'All') ? 'ENG-Premier League' : activeLeague;
 
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`${API_URL}/league-stats?league=${encodeURIComponent(activeLeague)}`);
+        const response = await fetch(`${API_URL}/league-stats?league=${encodeURIComponent(selectedLeague)}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch league stats (HTTP ${response.status})`);
         }
@@ -25,10 +33,8 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
       }
     };
 
-    if (activeLeague) {
-      fetchStats();
-    }
-  }, [activeLeague]);
+    fetchStats();
+  }, [selectedLeague]);
 
   if (loading) {
     return (
@@ -75,10 +81,25 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
     return 'form-badge form-d';
   };
 
-  const leagueTitle = activeLeague.includes('-') ? activeLeague.split('-')[1] : activeLeague;
+  const leagueTitle = selectedLeague.includes('-') ? selectedLeague.split('-')[1] : selectedLeague;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, paddingBottom: 48 }}>
+
+      {/* League Selection Tabs */}
+      {onSelectLeague && (
+        <div className="tab-bar">
+          {LEAGUES.map((l) => (
+            <button
+              key={l.id}
+              className={`tab-btn${selectedLeague === l.id ? ' active' : ''}`}
+              onClick={() => onSelectLeague(l.id)}
+            >
+              <span>{l.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Compact Header */}
       <div style={{
