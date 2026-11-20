@@ -293,10 +293,6 @@ const App = () => {
                   {currentTab === 'leagueStats' && 'Standings, recent team form, and both-teams-to-score probabilities'}
                 </p>
               </div>
-              <div className="top-header-badge">
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--emerald-bar)', flexShrink: 0 }}></span>
-                Model: Poisson + Dixon-Coles &nbsp;·&nbsp; 2026/27 Active
-              </div>
             </header>
           )}
 

@@ -197,11 +197,11 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
       <div className="grid-3">
 
         {/* League Outcome Distribution */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-          <div className="card-header">
+        <div className="card" style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column' }}>
+          <div className="card-header" style={{ padding: 0, paddingBottom: 12, marginBottom: 16 }}>
             <span className="card-title">League Outcome Distribution</span>
           </div>
-          <div style={{ padding: '20px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div className="odds-bar-container" style={{ height: 32 }}>
               <div
                 className="odds-segment odds-home"
@@ -224,15 +224,15 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12, fontSize: 11, fontWeight: 500, color: 'var(--text-secondary)' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--emerald-text)', display: 'inline-block' }}></span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--brand-accent)', display: 'inline-block' }}></span>
                 Home Win
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--amber-text)', display: 'inline-block' }}></span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-muted)', display: 'inline-block' }}></span>
                 Draw
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--rose-text)', display: 'inline-block' }}></span>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--emerald-bar)', display: 'inline-block' }}></span>
                 Away Win
               </span>
             </div>
@@ -240,11 +240,11 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
         </div>
 
         {/* Most Frequent Scorelines */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div className="card-header">
+        <div className="card" style={{ padding: '20px 24px' }}>
+          <div className="card-header" style={{ padding: 0, paddingBottom: 12, marginBottom: 16 }}>
             <span className="card-title">Most Frequent Scorelines</span>
           </div>
-          <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {stats.frequent_scores.slice(0, 5).map(fs => (
               <div key={fs.score} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12 }}>
                 <div style={{ width: 36, fontWeight: 700, color: 'var(--text-primary)' }} className="tabular-nums">{fs.score}</div>
@@ -261,11 +261,11 @@ const LeagueStats = ({ activeLeague, getTeamLogo }) => {
         </div>
 
         {/* Total Goals */}
-        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-          <div className="card-header">
+        <div className="card" style={{ padding: '20px 24px' }}>
+          <div className="card-header" style={{ padding: 0, paddingBottom: 12, marginBottom: 16 }}>
             <span className="card-title">Total Goals (Full-Time)</span>
           </div>
-          <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {stats.frequent_goals.slice(0, 5).map(fg => (
               <div key={fg.goals} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12 }}>
                 <div style={{ width: 52, fontWeight: 500, color: 'var(--text-secondary)' }}>{fg.goals} Goals</div>
