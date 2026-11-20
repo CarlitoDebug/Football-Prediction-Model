@@ -248,11 +248,6 @@ const LandingPage = ({ onExplorePredictions, onExploreFixtures }) => {
             
             {/* Left: Core Narrative & CTAs */}
             <div className="lp-hero-main">
-              <div className="lp-hero-badge">
-                <span className="pulse-dot" />
-                <span>Poisson &amp; Dixon-Coles Bivariate Modeling &middot; 2026/27 Live</span>
-              </div>
-
               <h1 className="lp-hero-title">
                 Quantitative Football Intelligence &amp; Predictive Modeling
               </h1>
@@ -298,10 +293,6 @@ const LandingPage = ({ onExplorePredictions, onExploreFixtures }) => {
             <div className="lp-hero-telemetry">
               <div className="lp-telemetry-header">
                 <div className="lp-telemetry-title">Engine Specifications &amp; Telemetry</div>
-                <span className="lp-telemetry-status">
-                  <span className="pulse-dot" />
-                  Active
-                </span>
               </div>
 
               <div className="lp-telemetry-steps">
