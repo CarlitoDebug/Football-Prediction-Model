@@ -31,12 +31,28 @@ const getTabFromPath = (pathname) => {
 };
 
 const App = () => {
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('fp_theme') || 'dark';
+    }
+    return 'dark';
+  });
+
   const [teams, setTeams] = useState([]);
   const [teamsError, setTeamsError] = useState(null);
   const [currentTab, setCurrentTab] = useState(() => getTabFromPath(window.location.pathname));
   const [activeLeague, setActiveLeague] = useState('All');
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('fp_theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -291,7 +307,12 @@ const App = () => {
 
   return (
     <div className="app-shell">
-      <TopNavbar currentTab={currentTab} onTabChange={handleTabChange} />
+      <TopNavbar
+        currentTab={currentTab}
+        onTabChange={handleTabChange}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
+      />
 
       <main className={`main-wrapper${currentTab === 'home' ? ' main-wrapper--full' : ''}`}>
         <div className={`main-container${currentTab === 'home' ? ' main-container--full' : ''}`}>

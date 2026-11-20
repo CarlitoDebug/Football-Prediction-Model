@@ -1,0 +1,112 @@
+/* ==========================================================================
+   BASE TOGGLE COMPONENT (UNTITLED UI / SHADCN SPECIFICATION)
+   ========================================================================== */
+
+.ui-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  background-color: var(--border-strong);
+  border: 1px solid transparent;
+  padding: 2px;
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  user-select: none;
+}
+
+.ui-toggle:hover {
+  opacity: 0.92;
+}
+
+.ui-toggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px #10B981;
+}
+
+.ui-toggle--checked {
+  background-color: #10B981;
+}
+
+/* ── Thumb ── */
+.ui-toggle-thumb {
+  pointer-events: none;
+  display: block;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ── Sizes ── */
+/* Size: sm (Default from user snippet) */
+.ui-toggle--sm {
+  width: 36px;
+  height: 20px;
+}
+.ui-toggle--sm .ui-toggle-thumb {
+  width: 14px;
+  height: 14px;
+}
+.ui-toggle--sm.ui-toggle--checked .ui-toggle-thumb {
+  transform: translateX(16px);
+}
+
+/* Size: md */
+.ui-toggle--md {
+  width: 44px;
+  height: 24px;
+}
+.ui-toggle--md .ui-toggle-thumb {
+  width: 18px;
+  height: 18px;
+}
+.ui-toggle--md.ui-toggle--checked .ui-toggle-thumb {
+  transform: translateX(20px);
+}
+
+/* Size: lg */
+.ui-toggle--lg {
+  width: 52px;
+  height: 28px;
+}
+.ui-toggle--lg .ui-toggle-thumb {
+  width: 22px;
+  height: 22px;
+}
+.ui-toggle--lg.ui-toggle--checked .ui-toggle-thumb {
+  transform: translateX(24px);
+}
+
+/* ── Disabled ── */
+.ui-toggle[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Theme Toggle Wrapper with Sun / Moon Icons ── */
+.theme-toggle-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+
+.theme-toggle-icon.active {
+  color: var(--text-primary);
+}

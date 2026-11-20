@@ -1,4 +1,5 @@
 import React from 'react';
+import { Toggle } from '@/components/base/toggle/toggle';
 
 const TAB_ROUTES = {
   home: '/',
@@ -7,7 +8,7 @@ const TAB_ROUTES = {
   leagueStats: '/league-stats',
 };
 
-const TopNavbar = ({ currentTab, onTabChange }) => {
+const TopNavbar = ({ currentTab, onTabChange, theme = 'dark', onToggleTheme }) => {
   const tabs = [
     { id: 'home', label: 'Home' },
     { id: 'dashboard', label: 'Match Predictor' },
@@ -71,6 +72,60 @@ const TopNavbar = ({ currentTab, onTabChange }) => {
             );
           })}
         </nav>
+
+        {/* Right side: Light/Dark Mode Toggle with <Toggle size="sm" /> */}
+        <div className="navbar-meta">
+          <div
+            className="theme-toggle-wrapper"
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {/* Sun Icon */}
+            <svg
+              className={`theme-toggle-icon${theme === 'light' ? ' active' : ''}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="14"
+              height="14"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+
+            {/* BaseDemo Toggle matching user's snippet */}
+            <Toggle
+              size="sm"
+              checked={theme === 'dark'}
+              onChange={() => onToggleTheme && onToggleTheme()}
+              ariaLabel="Toggle dark/light mode"
+            />
+
+            {/* Moon Icon */}
+            <svg
+              className={`theme-toggle-icon${theme === 'dark' ? ' active' : ''}`}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              width="14"
+              height="14"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          </div>
+        </div>
       </div>
     </header>
   );

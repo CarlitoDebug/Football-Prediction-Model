@@ -1,19 +1,20 @@
 /* ==========================================================================
-   1. DESIGN TOKENS (SOFT LIGHT MODE — LOW GLARE, QUANTITATIVE CLARITY)
+   1. DESIGN TOKENS (LIGHT & DARK THEMES COHESIVE WITH HOME PAGE)
    ========================================================================== */
-:root {
-  --bg-canvas: #F4F5F7;           /* Matte off-white page background */
-  --bg-surface: #FAFBFD;          /* Soft elevated card & sidebar surface */
-  --bg-subtle: #F1F3F6;           /* Inner wells, table headers, hover fills */
-  --border-subtle: #E2E8F0;       /* Crisp 1px card & divider borders */
-  --border-strong: #CBD5E1;       /* Input & interactive hover borders */
+:root,
+[data-theme="light"] {
+  --bg-canvas: #F4F6F8;           /* Crisp light page canvas */
+  --bg-surface: #FFFFFF;          /* Elevated surface */
+  --bg-subtle: #F1F4F6;           /* Wells, hover fills, table headers */
+  --border-subtle: #E2E8F0;       /* 1px borders */
+  --border-strong: #CBD5E1;       /* Interactive hover borders */
 
-  --text-primary: #1E293B;        /* Soft charcoal primary text (no harsh black) */
-  --text-secondary: #475569;      /* Muted slate secondary text */
-  --text-muted: #94A3B8;          /* Metadata, timestamps, disclaimers */
+  --text-primary: #0F172A;        /* Deep charcoal primary text */
+  --text-secondary: #475569;      /* Slate secondary text */
+  --text-muted: #94A3B8;          /* Metadata & timestamps */
 
-  --brand-primary: #1E293B;       /* Active nav & primary CTA fill */
-  --brand-accent: #2563EB;        /* Subtle analytical highlight */
+  --brand-primary: #10B981;       /* Vibrant emerald */
+  --brand-accent: #059669;        /* Emerald highlight */
 
   --emerald-bg: #ECFDF5;
   --emerald-text: #047857;
@@ -33,7 +34,42 @@
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.03), 0 1px 1px rgba(15, 23, 42, 0.02);
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+}
+
+/* ==========================================================================
+   DARK MODE (MATCHING HOME PAGE DEEP FOREST GREEN & EMERALD PALETTE)
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg-canvas: #06140E;           /* Deep dark forest canvas matching home */
+  --bg-surface: #0B2219;          /* Elevated dark emerald-charcoal card & header surface */
+  --bg-subtle: #102E23;           /* Input wells, hover backgrounds, table headers */
+  --border-subtle: rgba(255, 255, 255, 0.08); /* Crisp subtle divider */
+  --border-strong: rgba(52, 211, 153, 0.35);  /* Interactive hover border */
+
+  --text-primary: #F8FAFC;        /* High-contrast crisp white text */
+  --text-secondary: #94A3B8;      /* Soft slate text */
+  --text-muted: #64748B;          /* Muted metadata */
+
+  --brand-primary: #10B981;       /* Vibrant emerald */
+  --brand-accent: #34D399;        /* Glowing emerald highlight */
+
+  --emerald-bg: rgba(16, 185, 129, 0.16);
+  --emerald-text: #34D399;
+  --emerald-border: rgba(16, 185, 129, 0.35);
+  --emerald-bar: #10B981;
+
+  --amber-bg: rgba(245, 158, 11, 0.16);
+  --amber-text: #FBBF24;
+  --amber-border: rgba(245, 158, 11, 0.35);
+  --amber-bar: #F59E0B;
+
+  --rose-bg: rgba(244, 63, 94, 0.16);
+  --rose-text: #FB7185;
+  --rose-border: rgba(244, 63, 94, 0.35);
+  --rose-bar: #F43F5E;
+
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
 /* ==========================================================================
@@ -349,12 +385,18 @@ img {
   padding: 9px 12px;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
-  background-color: #FFFFFF;
+  background-color: var(--bg-surface);
   color: var(--text-primary);
   font-size: 13.5px;
   font-weight: 500;
   min-width: 190px;
   outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.select-input option {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
 }
 
 .select-input:focus {
@@ -368,7 +410,8 @@ img {
   align-items: center;
   gap: 6px;
   padding: 4px;
-  background-color: #E2E8F0;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   margin-bottom: 20px;
 }
@@ -389,10 +432,10 @@ img {
 }
 
 .tab-btn.active {
-  background-color: #FFFFFF;
+  background-color: var(--bg-surface);
   color: var(--text-primary);
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  box-shadow: var(--shadow-card);
 }
 
 /* ==========================================================================
@@ -510,7 +553,7 @@ img {
 }
 
 .data-table tr:hover td {
-  background-color: #F8FAFC;
+  background-color: var(--bg-subtle);
 }
 
 /* Compact Semantic Pills */
