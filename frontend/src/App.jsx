@@ -274,10 +274,17 @@ const App = () => {
           {currentTab !== 'home' && (
             <header className="top-header">
               <div>
-                <h1 className="top-header-title">
+                <h1 className="top-header-title" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {currentTab === 'leagueStats' && getLeagueLogo(activeLeague === 'All' ? 'ENG-Premier League' : activeLeague) && (
+                    <img
+                      src={getLeagueLogo(activeLeague === 'All' ? 'ENG-Premier League' : activeLeague)}
+                      alt="league logo"
+                      className="logo-sm"
+                    />
+                  )}
                   {currentTab === 'dashboard' && 'Match Predictor'}
                   {currentTab === 'predictions' && 'Incoming Fixtures'}
-                  {currentTab === 'leagueStats' && `${getLeagueName(activeLeague)} Analytics`}
+                  {currentTab === 'leagueStats' && `${getLeagueName(activeLeague === 'All' ? 'ENG-Premier League' : activeLeague)} Analytics`}
                 </h1>
                 <p className="top-header-subtitle">
                   {currentTab === 'dashboard' && 'Simulate match probabilities, expected goals (xG), and head-to-head metrics'}

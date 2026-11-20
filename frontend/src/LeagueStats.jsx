@@ -2,9 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { API_URL } from './config/api';
 
 const LEAGUES = [
-  { id: 'ENG-Premier League', name: 'English Premier League' },
-  { id: 'ESP-La Liga', name: 'La Liga' },
-  { id: 'GER-Bundesliga', name: 'Bundesliga' },
+  {
+    id: 'ENG-Premier League',
+    name: 'English Premier League',
+    logo: '/logos/premier-league/premier-league-england-logo-footylogos.svg',
+  },
+  {
+    id: 'ESP-La Liga',
+    name: 'La Liga',
+    logo: '/logos/la-liga/laliga-spain-logo-footylogos.svg',
+  },
+  {
+    id: 'GER-Bundesliga',
+    name: 'Bundesliga',
+    logo: '/logos/bundesliga/bundesliga-germany-logo-footylogos.svg',
+  },
 ];
 
 const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
@@ -95,6 +107,9 @@ const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
               className={`tab-btn${selectedLeague === l.id ? ' active' : ''}`}
               onClick={() => onSelectLeague(l.id)}
             >
+              {l.logo && (
+                <img src={l.logo} alt={l.name} className="logo-xs" />
+              )}
               <span>{l.name}</span>
             </button>
           ))}
@@ -107,7 +122,14 @@ const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
         gap: 12, borderBottom: '1px solid var(--border-subtle)', paddingBottom: 16
       }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {LEAGUES.find(l => l.id === selectedLeague)?.logo && (
+              <img
+                src={LEAGUES.find(l => l.id === selectedLeague).logo}
+                alt={leagueTitle}
+                className="logo-sm"
+              />
+            )}
             <h2 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
               {leagueTitle} Standings
             </h2>
