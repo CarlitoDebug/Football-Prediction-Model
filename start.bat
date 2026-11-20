@@ -5,7 +5,7 @@ echo ==================================================
 echo.
 
 echo Activating Python Virtual Environment...
-call venv\Scripts\activate
+call "%~dp0venv\Scripts\activate.bat"
 if %ERRORLEVEL% neq 0 (
     echo Error: Could not activate virtual environment!
     pause
@@ -14,7 +14,7 @@ if %ERRORLEVEL% neq 0 (
 echo.
 
 echo [1/4] Updating Match and Injury Data...
-python data_ingestion.py
+"%~dp0venv\Scripts\python.exe" data_ingestion.py
 if %ERRORLEVEL% neq 0 (
     echo Error during data ingestion!
     pause
@@ -23,7 +23,7 @@ if %ERRORLEVEL% neq 0 (
 
 echo.
 echo [2/4] Recalculating Elo and Form Features...
-python feature_engineering.py
+"%~dp0venv\Scripts\python.exe" feature_engineering.py
 if %ERRORLEVEL% neq 0 (
     echo Error during feature engineering!
     pause
@@ -32,7 +32,7 @@ if %ERRORLEVEL% neq 0 (
 
 echo.
 echo [3/4] Starting Flask API Backend...
-start cmd /k "python api.py"
+start cmd /k ""%~dp0venv\Scripts\python.exe" api.py"
 
 echo.
 echo [4/4] Starting React Frontend...

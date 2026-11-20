@@ -7,7 +7,7 @@ const Sidebar = ({ currentTab, onTabChange, activeLeague, onSelectLeague }) => {
     <aside className="sidebar">
       {/* Brand */}
       <button
-        onClick={() => onTabChange('dashboard')}
+        onClick={() => onTabChange('home')}
         className="sidebar-brand"
         style={{ background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', width: '100%' }}
       >
@@ -23,17 +23,24 @@ const Sidebar = ({ currentTab, onTabChange, activeLeague, onSelectLeague }) => {
 
       {/* Primary Nav */}
       <button
+        className={`nav-item${currentTab === 'home' ? ' active' : ''}`}
+        onClick={() => onTabChange('home')}
+      >
+        Home
+      </button>
+
+      <button
         className={`nav-item${currentTab === 'dashboard' ? ' active' : ''}`}
         onClick={() => onTabChange('dashboard')}
       >
-        Dashboard
+        Match Predictor
       </button>
 
       <button
         className={`nav-item${currentTab === 'predictions' ? ' active' : ''}`}
         onClick={() => onTabChange('predictions')}
       >
-        Predictions
+        Fixtures
       </button>
 
       {/* League Stats Collapsible */}

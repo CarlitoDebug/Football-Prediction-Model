@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import Sidebar from './Sidebar';
+import TopNavbar from './TopNavbar';
+import LandingPage from './LandingPage';
 import LeagueStats from './LeagueStats';
 import TeamFormCard from './TeamFormCard';
 import BttsPredictionsCard from './BttsPredictionsCard';
@@ -11,7 +13,7 @@ const LEAGUES = ['All', 'ENG-Premier League', 'ESP-La Liga', 'GER-Bundesliga'];
 const App = () => {
   const [teams, setTeams] = useState([]);
   const [teamsError, setTeamsError] = useState(null);
-  const [currentTab, setCurrentTab] = useState('dashboard');
+  const [currentTab, setCurrentTab] = useState('home');
   const [activeLeague, setActiveLeague] = useState('All');
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
@@ -262,19 +264,41 @@ const App = () => {
       />
 
       <div className="main-wrapper">
+        <TopNavbar currentTab={currentTab} onTabChange={handleTabChange} />
+
         <div className="main-container">
 
-          {/* ── Compact Top Header (replaces large blue banner) ── */}
-          <header className="top-header">
-            <div>
-              <h1 className="top-header-title">Football Analytics Pro</h1>
-              <p className="top-header-subtitle">AI-Powered Match Predictions &amp; Data Modeling</p>
-            </div>
-            <div className="top-header-badge">
-              <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--emerald-bar)', flexShrink: 0 }}></span>
-              Model: Poisson + Dixon-Coles &nbsp;·&nbsp; 2026/27 Active
-            </div>
-          </header>
+          {/* ═══════════════════════════════════════════════════
+              TAB: HOME (Landing Page)
+          ═══════════════════════════════════════════════════ */}
+          {currentTab === 'home' && (
+            <LandingPage
+              onExplorePredictions={() => handleTabChange('dashboard')}
+              onExploreFixtures={() => handleTabChange('predictions')}
+            />
+          )}
+
+          {/* ── Compact Top Header (for analytical views) ── */}
+          {currentTab !== 'home' && (
+            <header className="top-header">
+              <div>
+                <h1 className="top-header-title">
+                  {currentTab === 'dashboard' && 'Match Predictor'}
+                  {currentTab === 'predictions' && 'Incoming Fixtures'}
+                  {currentTab === 'leagueStats' && `${getLeagueName(activeLeague)} Analytics`}
+                </h1>
+                <p className="top-header-subtitle">
+                  {currentTab === 'dashboard' && 'Simulate match probabilities, expected goals (xG), and head-to-head metrics'}
+                  {currentTab === 'predictions' && 'Browse upcoming league fixtures and launch one-click match simulations'}
+                  {currentTab === 'leagueStats' && 'Standings, recent team form, and both-teams-to-score probabilities'}
+                </p>
+              </div>
+              <div className="top-header-badge">
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'var(--emerald-bar)', flexShrink: 0 }}></span>
+                Model: Poisson + Dixon-Coles &nbsp;·&nbsp; 2026/27 Active
+              </div>
+            </header>
+          )}
 
           {/* ═══════════════════════════════════════════════════
               TAB: DASHBOARD (Match Prediction)

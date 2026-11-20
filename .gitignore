@@ -25,5 +25,6 @@ frontend/.vite/
 .DS_Store
 Thumbs.db
 downloaded_files/
+data/soccerdata/
 
 # Note: data/ and models/ are explicitly NOT ignored so Render and GitHub Actions keep data in sync.

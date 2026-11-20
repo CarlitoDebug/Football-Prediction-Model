@@ -3,6 +3,11 @@ import os
 import pathlib
 import urllib.request
 from datetime import datetime, timezone
+
+# Ensure soccerdata directories stay cleanly inside workspace
+if "SOCCERDATA_DIR" not in os.environ:
+    os.environ["SOCCERDATA_DIR"] = os.path.abspath(os.path.join(os.path.dirname(__file__), "data", "soccerdata"))
+
 from bs4 import BeautifulSoup
 import pandas as pd
 import soccerdata as sd
