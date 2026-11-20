@@ -12,6 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      'react-loading-indicators': path.resolve(__dirname, './src/components/BlinkBlur.jsx'),
     },
   },
 })

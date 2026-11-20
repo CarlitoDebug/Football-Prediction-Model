@@ -1,0 +1,65 @@
+/* ==========================================================================
+   BLINK BLUR LOADING INDICATOR COMPONENT
+   ========================================================================== */
+
+.blink-blur-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.blink-blur-dots {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+}
+
+.blink-blur-dot {
+  display: block;
+  border-radius: 50%;
+  animation: blink-blur-pulse 1.35s ease-in-out infinite both;
+  will-change: transform, opacity, filter;
+}
+
+.blink-blur-dot.dot-1 {
+  animation-delay: 0s;
+}
+
+.blink-blur-dot.dot-2 {
+  animation-delay: 0.25s;
+}
+
+.blink-blur-dot.dot-3 {
+  animation-delay: 0.75s;
+}
+
+.blink-blur-dot.dot-4 {
+  animation-delay: 0.5s;
+}
+
+@keyframes blink-blur-pulse {
+  0%, 100% {
+    transform: scale(0.65);
+    opacity: 0.25;
+    filter: blur(2px);
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.blink-blur-text {
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-align: center;
+  transition: color 0.15s ease;
+}

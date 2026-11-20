@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from './config/api';
+import { BlinkBlur } from './components/BlinkBlur';
 
 const LEAGUES = [
   {
@@ -19,7 +20,7 @@ const LEAGUES = [
   },
 ];
 
-const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
+const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague, theme = 'dark' }) => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -50,9 +51,13 @@ const LeagueStats = ({ activeLeague, getTeamLogo, onSelectLeague }) => {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '5rem 0', color: 'var(--text-muted)' }}>
-        <div className="loader" style={{ marginBottom: 12 }}></div>
-        <span style={{ fontSize: 12, fontWeight: 500 }}>Loading league statistics...</span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '5rem 0' }}>
+        <BlinkBlur
+          color={theme === 'dark' ? '#34D399' : '#059669'}
+          size="medium"
+          text="Loading league statistics..."
+          textColor={theme === 'dark' ? '#94A3B8' : '#64748B'}
+        />
       </div>
     );
   }

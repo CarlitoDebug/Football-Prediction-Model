@@ -5,6 +5,7 @@ import LandingPage from './LandingPage';
 import LeagueStats from './LeagueStats';
 import TeamFormCard from './TeamFormCard';
 import BttsPredictionsCard from './BttsPredictionsCard';
+import { BlinkBlur } from './components/BlinkBlur';
 
 import { API_URL, API_BASE_URL } from './config/api';
 const LEAGUES = ['All', 'ENG-Premier League', 'ESP-La Liga', 'GER-Bundesliga'];
@@ -415,7 +416,16 @@ const App = () => {
                 </div>
 
                 {error && <div className="error-message" style={{ marginTop: 16 }}>{error}</div>}
-                {loading && <div style={{ marginTop: 20, textAlign: 'center' }}><div className="loader"></div></div>}
+                {loading && (
+                  <div style={{ marginTop: 24, textAlign: 'center' }}>
+                    <BlinkBlur
+                      color={theme === 'dark' ? '#34D399' : '#059669'}
+                      size="medium"
+                      text="Simulating match outcome..."
+                      textColor={theme === 'dark' ? '#94A3B8' : '#64748B'}
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Top Analytics Row */}
@@ -717,6 +727,7 @@ const App = () => {
               activeLeague={activeLeague}
               getTeamLogo={getTeamLogo}
               onSelectLeague={setActiveLeague}
+              theme={theme}
             />
           )}
 
@@ -769,7 +780,14 @@ const App = () => {
               </div>
 
               {fixturesLoading ? (
-                <div style={{ textAlign: 'center', padding: '3rem' }}><div className="loader"></div></div>
+                <div style={{ textAlign: 'center', padding: '4rem 0' }}>
+                  <BlinkBlur
+                    color={theme === 'dark' ? '#34D399' : '#059669'}
+                    size="medium"
+                    text="Loading upcoming fixtures..."
+                    textColor={theme === 'dark' ? '#94A3B8' : '#64748B'}
+                  />
+                </div>
               ) : fixturesError ? (
                 <div className="card" style={{ padding: '2.5rem', textAlign: 'center' }}>
                   <p style={{ color: 'var(--rose-text)', fontWeight: 600, fontSize: 14, margin: '0 0 8px 0' }}>{fixturesError}</p>
