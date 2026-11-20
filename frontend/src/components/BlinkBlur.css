@@ -1,62 +1,45 @@
 /* ==========================================================================
-   BLINK BLUR LOADING INDICATOR COMPONENT
+   BLINKBLUR LOADING INDICATOR (REACT-LOADING-INDICATORS SPECIFICATION)
+   5 slanted vertical bars with sequential blur & blink wave
    ========================================================================== */
 
-.blink-blur-wrapper {
+.blink-blur-container {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   user-select: none;
 }
 
-.blink-blur-dots {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+.blink-blur-bars {
+  display: inline-flex;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
 }
 
-.blink-blur-dot {
-  display: block;
-  border-radius: 50%;
-  animation: blink-blur-pulse 1.35s ease-in-out infinite both;
+.blink-blur-bar {
+  display: inline-block;
+  border-radius: 4px;
+  transform: skewX(-15deg);
+  animation: blink-blur-wave 1.25s ease-in-out infinite both;
   will-change: transform, opacity, filter;
 }
 
-.blink-blur-dot.dot-1 {
-  animation-delay: 0s;
-}
-
-.blink-blur-dot.dot-2 {
-  animation-delay: 0.25s;
-}
-
-.blink-blur-dot.dot-3 {
-  animation-delay: 0.75s;
-}
-
-.blink-blur-dot.dot-4 {
-  animation-delay: 0.5s;
-}
-
-@keyframes blink-blur-pulse {
+@keyframes blink-blur-wave {
   0%, 100% {
-    transform: scale(0.65);
-    opacity: 0.25;
-    filter: blur(2px);
+    opacity: 0.35;
+    filter: blur(2.5px);
+    transform: skewX(-15deg) scaleY(0.92);
   }
   50% {
-    transform: scale(1.15);
     opacity: 1;
     filter: blur(0px);
+    transform: skewX(-15deg) scaleY(1.06);
   }
 }
 
-.blink-blur-text {
+.blink-blur-label {
   font-family: inherit;
   font-weight: 500;
   letter-spacing: 0.02em;

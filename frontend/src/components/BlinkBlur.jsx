@@ -3,7 +3,8 @@ import './BlinkBlur.css';
 
 /**
  * BlinkBlur Loading Indicator
- * Compatible with `react-loading-indicators` API:
+ * Matches react-loading-indicators exact specification:
+ * 5 skewed rounded vertical bars blinking and blurring in wave sequence
  * <BlinkBlur color="" size="medium" text="" textColor="" />
  */
 export const BlinkBlur = ({
@@ -14,22 +15,21 @@ export const BlinkBlur = ({
   className = '',
   style = {},
 }) => {
-  // Size dimensions
   const sizeMap = {
-    small: { container: 28, dot: 7, font: 12 },
-    medium: { container: 42, dot: 10, font: 13 },
-    large: { container: 60, dot: 15, font: 15 },
+    small: { height: 22, width: 8, gap: 4, font: 11 },
+    medium: { height: 34, width: 11, gap: 5, font: 13 },
+    large: { height: 48, width: 16, gap: 7, font: 15 },
   };
 
   const dim = sizeMap[size] || sizeMap.medium;
 
-  // Use theme colors if not explicitly provided
-  const activeColor = color || 'var(--brand-accent, #10B981)';
+  // Theme-aware default colors
+  const activeColor = color || 'var(--brand-primary, #10B981)';
   const activeTextColor = textColor || 'var(--text-muted, #94A3B8)';
 
   return (
     <div
-      className={`blink-blur-wrapper ${className}`}
+      className={`blink-blur-container ${className}`}
       style={{
         ...style,
       }}
@@ -37,56 +37,32 @@ export const BlinkBlur = ({
       aria-live="polite"
     >
       <div
-        className="blink-blur-dots"
+        className="blink-blur-bars"
         style={{
-          width: dim.container,
-          height: dim.container,
+          gap: `${dim.gap}px`,
+          height: `${dim.height}px`,
         }}
       >
-        <span
-          className="blink-blur-dot dot-1"
-          style={{
-            width: dim.dot,
-            height: dim.dot,
-            backgroundColor: activeColor,
-            boxShadow: `0 0 10px ${activeColor}`,
-          }}
-        />
-        <span
-          className="blink-blur-dot dot-2"
-          style={{
-            width: dim.dot,
-            height: dim.dot,
-            backgroundColor: activeColor,
-            boxShadow: `0 0 10px ${activeColor}`,
-          }}
-        />
-        <span
-          className="blink-blur-dot dot-3"
-          style={{
-            width: dim.dot,
-            height: dim.dot,
-            backgroundColor: activeColor,
-            boxShadow: `0 0 10px ${activeColor}`,
-          }}
-        />
-        <span
-          className="blink-blur-dot dot-4"
-          style={{
-            width: dim.dot,
-            height: dim.dot,
-            backgroundColor: activeColor,
-            boxShadow: `0 0 10px ${activeColor}`,
-          }}
-        />
+        {[0, 1, 2, 3, 4].map((i) => (
+          <span
+            key={i}
+            className={`blink-blur-bar blink-blur-bar-${i + 1}`}
+            style={{
+              width: `${dim.width}px`,
+              height: `${dim.height}px`,
+              backgroundColor: activeColor,
+              animationDelay: `${i * 0.16}s`,
+            }}
+          />
+        ))}
       </div>
 
       {text && (
         <span
-          className="blink-blur-text"
+          className="blink-blur-label"
           style={{
             color: activeTextColor,
-            fontSize: dim.font,
+            fontSize: `${dim.font}px`,
           }}
         >
           {text}
