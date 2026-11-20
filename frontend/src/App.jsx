@@ -40,6 +40,7 @@ const App = () => {
   });
 
   const [teams, setTeams] = useState([]);
+  const [teamsByLeague, setTeamsByLeague] = useState({});
   const [teamsError, setTeamsError] = useState(null);
   const [currentTab, setCurrentTab] = useState(() => getTabFromPath(window.location.pathname));
   const [activeLeague, setActiveLeague] = useState('All');
@@ -77,6 +78,9 @@ const App = () => {
       .then(data => {
         if (data.teams) {
           setTeams(data.teams);
+          if (data.leagues) {
+            setTeamsByLeague(data.leagues);
+          }
           setTeamsError(null);
           if (data.teams.includes("Arsenal")) setHomeTeam("Arsenal");
           if (data.teams.includes("Chelsea")) setAwayTeam("Chelsea");
@@ -387,7 +391,14 @@ const App = () => {
                     <label style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Home Team</label>
                     <select className="select-input" value={homeTeam} onChange={e => setHomeTeam(e.target.value)} style={{ width: '100%' }}>
                       <option value="">Select Home Team</option>
-                      {teams.map(team => <option key={team} value={team}>{team}</option>)}
+                      {Object.keys(teamsByLeague).length > 0
+                        ? Object.entries(teamsByLeague).map(([lgKey, lgTeams]) => (
+                            <optgroup key={lgKey} label={lgKey.replace('ENG-', '').replace('ESP-', '').replace('GER-', '')}>
+                              {lgTeams.map(team => <option key={team} value={team}>{team}</option>)}
+                            </optgroup>
+                          ))
+                        : teams.map(team => <option key={team} value={team}>{team}</option>)
+                      }
                     </select>
                   </div>
 
@@ -397,7 +408,14 @@ const App = () => {
                     <label style={{ fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)' }}>Away Team</label>
                     <select className="select-input" value={awayTeam} onChange={e => setAwayTeam(e.target.value)} style={{ width: '100%' }}>
                       <option value="">Select Away Team</option>
-                      {teams.map(team => <option key={team} value={team}>{team}</option>)}
+                      {Object.keys(teamsByLeague).length > 0
+                        ? Object.entries(teamsByLeague).map(([lgKey, lgTeams]) => (
+                            <optgroup key={lgKey} label={lgKey.replace('ENG-', '').replace('ESP-', '').replace('GER-', '')}>
+                              {lgTeams.map(team => <option key={team} value={team}>{team}</option>)}
+                            </optgroup>
+                          ))
+                        : teams.map(team => <option key={team} value={team}>{team}</option>)
+                      }
                     </select>
                   </div>
 

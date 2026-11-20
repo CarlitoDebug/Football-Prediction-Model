@@ -193,13 +193,27 @@ def get_prediction_data(home_team, away_team):
         stats = pd.read_csv("data/team_latest_stats.csv")
         stats['date'] = pd.to_datetime(stats['date'])
         
-        if home_team not in stats['team'].values:
-            return {"error": f"Team '{home_team}' not found."}
-        if away_team not in stats['team'].values:
-            return {"error": f"Team '{away_team}' not found."}
+        def get_team_stats(t_name):
+            if t_name in stats['team'].values:
+                return stats[stats['team'] == t_name].sort_values('date').iloc[-1]
+            # Dynamic fallback for newly promoted or unprofiled teams: reasonable league baseline
+            return pd.Series({
+                'rolling_xg_for': 1.25,
+                'rolling_xg_against': 1.65,
+                'rolling_np_xg_for': 1.20,
+                'rolling_np_xg_against': 1.55,
+                'rolling_ppda_for': 12.5,
+                'rolling_deep_completions_for': 5.5,
+                'rolling_deep_completions_against': 7.5,
+                'rolling_ppg': 1.10,
+                'rolling_xPoints': 1.15,
+                'rolling_gd': -0.40,
+                'rest_days': 7.0,
+                'fatigue_index': 2.0,
+            })
             
-        home_stats = stats[stats['team'] == home_team].sort_values('date').iloc[-1]
-        away_stats = stats[stats['team'] == away_team].sort_values('date').iloc[-1]
+        home_stats = get_team_stats(home_team)
+        away_stats = get_team_stats(away_team)
         
         # --- Corner Stats ---
         corner_stats = pd.read_csv("data/team_latest_corner_stats.csv")

@@ -16,9 +16,9 @@ export const BlinkBlur = ({
   style = {},
 }) => {
   const sizeMap = {
-    small: { height: 22, width: 8, gap: 4, font: 11 },
-    medium: { height: 34, width: 11, gap: 5, font: 13 },
-    large: { height: 48, width: 16, gap: 7, font: 15 },
+    small: { height: 26, width: 10, gap: 5, font: 12, radius: 4 },
+    medium: { height: 38, width: 15, gap: 6, font: 13, radius: 5 },
+    large: { height: 50, width: 20, gap: 8, font: 15, radius: 6 },
   };
 
   const dim = sizeMap[size] || sizeMap.medium;
@@ -50,6 +50,7 @@ export const BlinkBlur = ({
             style={{
               width: `${dim.width}px`,
               height: `${dim.height}px`,
+              borderRadius: `${dim.radius}px`,
               backgroundColor: activeColor,
               animationDelay: `${i * 0.16}s`,
             }}

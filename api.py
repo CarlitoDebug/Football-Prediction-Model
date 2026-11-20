@@ -26,25 +26,37 @@ def health_check():
 
 @app.route('/api/teams', methods=['GET'])
 def get_teams():
-    all_teams = set()
-    if os.path.exists("team_mapping.json"):
-        try:
-            with open("team_mapping.json", "r") as f:
-                mapping = json.load(f)
-            all_teams.update(mapping.values())
-        except Exception as e:
-            print("Error loading team_mapping.json:", e)
+    if not os.path.exists("data/schedule.csv"):
+        return jsonify({"teams": []})
 
-    if os.path.exists("data/schedule.csv"):
-        try:
-            df = pd.read_csv("data/schedule.csv")
-            all_teams.update(df['home_team'].dropna().unique())
-            all_teams.update(df['away_team'].dropna().unique())
-        except Exception as e:
-            print("Error loading schedule teams:", e)
+    try:
+        df = pd.read_csv("data/schedule.csv")
+        # Current active season is the latest season in the schedule
+        latest_season = int(df['season'].max())
+        curr_df = df[df['season'] == latest_season]
 
-    teams = sorted(list(all_teams))
-    return jsonify({"teams": teams})
+        league = request.args.get('league')
+        if league and league in curr_df['league'].values:
+            curr_df = curr_df[curr_df['league'] == league]
+
+        # Extract only teams actively participating in the current season
+        current_teams = sorted(list(set(curr_df['home_team'].dropna()).union(set(curr_df['away_team'].dropna()))))
+
+        # Group teams by league for organized UI selection
+        leagues_map = {}
+        full_curr = df[df['season'] == latest_season]
+        for lg in sorted(full_curr['league'].dropna().unique()):
+            sub = full_curr[full_curr['league'] == lg]
+            leagues_map[lg] = sorted(list(set(sub['home_team'].dropna()).union(set(sub['away_team'].dropna()))))
+
+        return jsonify({
+            "teams": current_teams,
+            "leagues": leagues_map,
+            "season": latest_season
+        })
+    except Exception as e:
+        print("Error loading current season teams:", e)
+        return jsonify({"teams": [], "error": str(e)})
 
 def sanitize_nans(obj):
     """Recursively replaces float('nan') with None/0.0 to produce valid JSON."""
