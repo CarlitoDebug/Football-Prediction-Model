@@ -9,10 +9,31 @@ import BttsPredictionsCard from './BttsPredictionsCard';
 import { API_URL, API_BASE_URL } from './config/api';
 const LEAGUES = ['All', 'ENG-Premier League', 'ESP-La Liga', 'GER-Bundesliga'];
 
+const ROUTE_MAP = {
+  '/': 'home',
+  '/home': 'home',
+  '/predictor': 'dashboard',
+  '/fixtures': 'predictions',
+  '/league-stats': 'leagueStats',
+};
+
+const TAB_TO_ROUTE = {
+  home: '/',
+  dashboard: '/predictor',
+  predictions: '/fixtures',
+  leagueStats: '/league-stats',
+};
+
+const getTabFromPath = (pathname) => {
+  if (typeof window === 'undefined') return 'home';
+  const cleanPath = pathname ? pathname.toLowerCase().replace(/\/$/, '') || '/' : '/';
+  return ROUTE_MAP[cleanPath] || 'home';
+};
+
 const App = () => {
   const [teams, setTeams] = useState([]);
   const [teamsError, setTeamsError] = useState(null);
-  const [currentTab, setCurrentTab] = useState('home');
+  const [currentTab, setCurrentTab] = useState(() => getTabFromPath(window.location.pathname));
   const [activeLeague, setActiveLeague] = useState('All');
   const [homeTeam, setHomeTeam] = useState('');
   const [awayTeam, setAwayTeam] = useState('');
@@ -53,6 +74,15 @@ const App = () => {
   useEffect(() => {
     fetchFixtures(activeLeague);
   }, [activeLeague]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const tab = getTabFromPath(window.location.pathname);
+      setCurrentTab(tab);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const handleLeagueClick = (league) => {
     setActiveLeague(league);
@@ -235,15 +265,21 @@ const App = () => {
   };
 
   const handleFixtureClick = (fixture) => {
-    setCurrentTab('dashboard');
+    handleTabChange('dashboard', true);
     setHomeTeam(fixture.home_team);
     setAwayTeam(fixture.away_team);
     handlePredict(fixture.home_team, fixture.away_team);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab, updateUrl = true) => {
     setCurrentTab(tab);
+    if (updateUrl && typeof window !== 'undefined') {
+      const targetPath = TAB_TO_ROUTE[tab] || '/';
+      if (window.location.pathname !== targetPath) {
+        window.history.pushState({ tab }, '', targetPath);
+      }
+    }
     if (tab === 'dashboard') {
       setHomeTeam('');
       setAwayTeam('');

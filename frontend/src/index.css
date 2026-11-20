@@ -987,6 +987,7 @@ img {
   display: flex;
   align-items: center;
   transition: color 0.15s ease;
+  text-decoration: none;
 }
 
 .navbar-tab-item:hover {

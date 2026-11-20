@@ -1,5 +1,12 @@
 import React from 'react';
 
+const TAB_ROUTES = {
+  home: '/',
+  dashboard: '/predictor',
+  predictions: '/fixtures',
+  leagueStats: '/league-stats',
+};
+
 const TopNavbar = ({ currentTab, onTabChange }) => {
   const tabs = [
     { id: 'home', label: 'Home' },
@@ -12,12 +19,14 @@ const TopNavbar = ({ currentTab, onTabChange }) => {
     <header className="site-navbar">
       <div className="site-navbar-inner">
         {/* Brand & Logo */}
-        <div
+        <a
+          href="/"
           className="navbar-brand"
-          onClick={() => onTabChange('home')}
-          role="button"
-          tabIndex={0}
-          style={{ outline: 'none' }}
+          onClick={(e) => {
+            e.preventDefault();
+            onTabChange('home');
+          }}
+          style={{ outline: 'none', textDecoration: 'none' }}
         >
           <div className="navbar-logo-icon">
             <svg
@@ -39,21 +48,26 @@ const TopNavbar = ({ currentTab, onTabChange }) => {
             </svg>
           </div>
           <span className="navbar-brand-name">FootyPredict</span>
-        </div>
+        </a>
 
         {/* Navigation Tabs */}
         <nav className="navbar-nav-tabs">
           {tabs.map((tab) => {
             const isActive = currentTab === tab.id;
+            const path = TAB_ROUTES[tab.id] || '/';
             return (
-              <button
+              <a
                 key={tab.id}
+                href={path}
                 className={`navbar-tab-item${isActive ? ' active' : ''}`}
-                onClick={() => onTabChange(tab.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onTabChange(tab.id);
+                }}
               >
                 {tab.label}
                 {isActive && <span className="navbar-tab-indicator" />}
-              </button>
+              </a>
             );
           })}
         </nav>
